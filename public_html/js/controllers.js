@@ -12,7 +12,7 @@ angular.module('myApp.controllers', [])
     //Test List Controller!
     .controller('TestListCtrl', ['$scope','$modal', function($scope,$modal)
     {
-
+        $scope.mySelections =[];
         $scope.testListDataMOCK = 
          [
             {svcName: "s-1", svcId: 1, testId: 1, testStatus: "Aborted", data: {svcName: "Moroni", svcId: 50, testId: 1, testStatus: "Aborted"}},
@@ -29,6 +29,8 @@ angular.module('myApp.controllers', [])
             showFooter:     true,
             columnDefs: [ {field: 'svcName'}, {field: 'svcId'}, {field: 'testId'}, {field: 'testStatus'}, {field: 'data', visible: false}],
             afterSelectionChange: onSelect,
+            selectedItems: $scope.mySelections,
+            multiSelect: false,
             rowTemplate: '<div ng-dblclick="onDblClickRow(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>'
         };
         $scope.scopeVal=$scope.valueOf();
@@ -38,13 +40,14 @@ angular.module('myApp.controllers', [])
         var reqAllTests = { type: "read", mbean: "com.rad.mtsc.y1564.server.jmx:type=Y1564MonitorMBean", attribute: "AllTests"};
         $scope.resp = j4p.request(reqAllTests);
         $scope.customObj= $scope.resp===null? null:$scope.resp.value;
-        $scope.testListData =[];
+        
         if($scope.customObj!==null)
         {
         createTestListDataFromResponseValue($scope.resp.value,$scope.testListData);
         /*$scope.testListData = [{param1: $scope.customObj.someList[0].param1, param2: $scope.customObj.someList[0].param2},
             {param1: $scope.customObj.someList[1].param1, param2: $scope.customObj.someList[1].param2}]
             ;*/
+        $scope.selectedRows=[{name:"no selection"}] ;    
         $scope.gridOptions=
         {
             data: 'testListData',
@@ -53,6 +56,8 @@ angular.module('myApp.controllers', [])
             showFooter:     true,
             columnDefs: [ {field: 'svcName'}, {field: 'svcId'}, {field: 'testId'}, {field: 'testStatus'}, {field: 'data', visible: false}],
             afterSelectionChange: onSelect,
+            selectedItems: $scope.mySelections,
+            multiSelect: false,
             rowTemplate: '<div ng-dblclick="onDblClickRow(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>'
 
 //          ,  rowTemplate: '<div ng-dblclick="onDblClick(row.entity)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ' +
@@ -73,7 +78,7 @@ angular.module('myApp.controllers', [])
         {
             if(!rowItem.selected)
                 return;
-            console.log("ON SELECT!!!");
+            console.log("ON SELECT!!! selection:"+$scope.mySelections[0].svcName);
         }
 
         //open popup dialog (according template)
@@ -87,7 +92,11 @@ angular.module('myApp.controllers', [])
                 resolve: {
                     items: function () {
                         return $scope.items;
+                    },
+                    selection: function () {
+                        return $scope.mySelections;
                     }
+
                 }
             });
 
@@ -140,8 +149,9 @@ function AlertDemoCtrl($scope) {
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
-
+var ModalInstanceCtrl = function ($scope, $modalInstance, items, selection) 
+{
+console.log("selected on dbl click: "+selection[0].svcName);
   $scope.items = items;
   $scope.selected = {
     item: $scope.items[0]
@@ -155,6 +165,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
     $modalInstance.dismiss('cancel');
   };
   
+    $scope.testInstanceNameValuesData=createNameValueDataFromTestInstanceObject(selection[0]);
           $scope.testListDataMOCK = 
          [
             {svcName: "s-1", svcId: 1, testId: 1, testStatus: "Aborted", data: {svcName: "Moroni", svcId: 50, testId: 1, testStatus: "Aborted"}},
@@ -165,13 +176,21 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
             {svcName: "s-6", svcId: 6, testId: 6, testStatus: "Failed", data: {svcName: "Moroni", svcId: 50, testId: 1, testStatus: "Aborted"}}
         ];
          $scope.gridOption = {
-            data: 'testListDataMOCK',
+            data: 'testInstanceNameValuesData',
             showGroupPanel: true,
             showColumnMenu: true,
             showFooter:     true,
-            columnDefs: [ {field: 'svcName'}, {field: 'svcId'}, {field: 'testId'}, {field: 'testStatus'}, {field: 'data', visible: false}],
+            //columnDefs: [ {field: 'svcName'}, {field: 'svcId'}, {field: 'testId'}, {field: 'testStatus'}, {field: 'data', visible: false}],
         };
-
-  
-  
+        
 };
+function createNameValueDataFromTestInstanceObject(tst)
+{
+    var nameValList=[];
+    for(var p in tst.data)
+    {
+        var obj={name: p,  value: tst[p]};
+        nameValList.push(obj);
+    }
+    return nameValList;
+}
