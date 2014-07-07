@@ -40,7 +40,7 @@ angular.module('myApp.controllers', [])
         var reqAllTests = { type: "read", mbean: "com.rad.mtsc.y1564.server.jmx:type=Y1564MonitorMBean", attribute: "AllTests"};
         $scope.resp = j4p.request(reqAllTests);
         $scope.customObj= $scope.resp===null? null:$scope.resp.value;
-        
+        $scope.testListData=[]; //for real get
         if($scope.customObj!==null)
         {
         createTestListDataFromResponseValue($scope.resp.value,$scope.testListData);
@@ -186,10 +186,15 @@ console.log("selected on dbl click: "+selection[0].svcName);
 };
 function createNameValueDataFromTestInstanceObject(tst)
 {
+    var testData={};
+    if(tst.data.testInstanceMibAccessData!=null)
+        testData=tst.data.testInstanceMibAccessData;
+    else
+        testData=tst.data;
     var nameValList=[];
-    for(var p in tst.data)
+    for(var p in testData)
     {
-        var obj={name: p,  value: tst[p]};
+        var obj={name: p,  value: testData[p]};
         nameValList.push(obj);
     }
     return nameValList;
