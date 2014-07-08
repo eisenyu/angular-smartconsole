@@ -42,7 +42,9 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
   <link rel="stylesheet" href="css/app.css"/>
-      <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="css/simple-sidebar.css"/>
+
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -77,16 +79,39 @@
     </div>
 </div>
 
+<div id="wrapper">
+
+    <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#">Overview</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Export</a></li>
+            </ul>
+         </div>
+
+    <!-- Page content -->
+    <div id="page-content-wrapper">
+        <div class="page-content inset">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div ng-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 
 
-
-  <div ng-view></div>
 
   <div>Angular seed app: v<span app-version></span></div>
 
-
+</div>
  
 </body>
 </html>

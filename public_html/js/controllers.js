@@ -180,6 +180,8 @@ console.log("selected on dbl click: "+selection[0].svcName);
             showGroupPanel: true,
             showColumnMenu: true,
             showFooter:     true,
+             enableColumnResize: true,
+             enableCellEdit: true
             //columnDefs: [ {field: 'svcName'}, {field: 'svcId'}, {field: 'testId'}, {field: 'testStatus'}, {field: 'data', visible: false}],
         };
         
