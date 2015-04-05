@@ -9,6 +9,9 @@ angular.module('myApp.controllers', [])
   .controller('MyCtrl2', ['$scope', function($scope) {
 
   }])
+//  .controller('SvcListCtrl', ['$scope', function($scope){ 
+//          fun($scope);
+//   }])
     //Test List Controller!
     .controller('TestListCtrl', ['$scope','$modal', function($scope,$modal)
     {

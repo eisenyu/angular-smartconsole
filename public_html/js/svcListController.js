@@ -6,11 +6,27 @@
  * and open the template in the editor.
  */
 
-angular.module('myApp.controllers', [])
+var module=angular.module('myApp.controllers', [])
   .controller('SvcListCtrl', ['$scope', SvcListCtrl]);
-
+var _scope;
+function isSelected(tabNum)
+{
+    return _scope.tabsStatus.selected===tabNum;
+}
+function selectTab(tabNum)
+{
+    _scope.tabsStatus.selected=tabNum;
+}
 function SvcListCtrl($scope) 
 {
+    _scope=$scope;
+    $scope.tabsStatus={
+        selected: 1,
+        collapsed: 'false'
+    };
+    
+    $scope.isSelected=isSelected;
+    $scope.selectTab=selectTab;
         $scope.mySelections =[];
         $scope.testListDataMOCK = 
          [

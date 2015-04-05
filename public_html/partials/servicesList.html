@@ -39,6 +39,15 @@
     </p>
 
     <div  class="gridStyle" ng-grid="gridOptionsSvc"></div>
+    <ul class="nav nav-pills">
+        <li ng-class="{ active: isSelected(1)}">
+            <a href ng-click="selectTab(1)">Y1564 Tests</a>
+        </li>
+        <li ng-class="{ active: isSelected(2)}">
+            <a href ng-click="selectTab(2)">ABM Tests</a>
+        </li>
+    </ul>
+    
 </div>
 
 <br/><br/><br/><br/><br/><br/>
